@@ -11,7 +11,6 @@ typedef struct TreeNode {
     struct TreeNode* left;
     struct TreeNode* right;
 } TreeNode;
-
 typedef struct {
     TreeNode* items[MAX_QUEUE];
     int front, rear;
@@ -21,28 +20,23 @@ typedef struct {
 void InitQueue(Queue* pqueue) {
     pqueue->front = pqueue->rear = -1;
 }
-
 bool isEmpty(Queue* queue) {
     return queue->front == -1;
 }
 bool isFull(Queue* pqueue) {
     return pqueue->front == (pqueue->rear + 1) % MAX_QUEUE;
 }
-
-
 void Enqueue(Queue* pqueue, TreeNode* root) {
     if (isFull(pqueue))
         exit(1);
     pqueue->rear = (pqueue->rear + 1) % MAX_QUEUE;
     pqueue->items[pqueue->rear] = root;
 }
-
 void Dequeue(Queue* pqueue) {
     if (isEmpty(pqueue))
         exit(1);
     pqueue->front = (pqueue->front + 1) % MAX_QUEUE;
 }
-
 TreeNode* Peek(Queue* pqueue) {
     if (isEmpty(pqueue))
         exit(1);
@@ -50,33 +44,50 @@ TreeNode* Peek(Queue* pqueue) {
         return pqueue->items[pqueue->front];
 }
 
-// 레벨 순서대로 이진 트리에 노드 삽입
-void insertLevelOrder(TreeNode* root, int val) {
-    Queue queue;
-    if (root == NULL) exit(1);
-    InitQueue(&queue);
-    Enqueue(&queue, root);//루트 노트 EnQueue
 
-    while (!isEmpty(&queue))
-    {
-        root = Peek(&queue);
-        Dequeue(&queue);
+TreeNode* CreateNode(int val)
+{
+    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
+    if (!newNode) exit(1);
+    newNode->val = val;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
 
-        if (root->left= NULL)
-            Enqueue(&queue, root->left);
-        if (root->right!= NULL)
-            Enqueue(&queue, root->right);
+//Binary Tree에 노드 삽입 
+TreeNode* InsertNode(TreeNode* root, int val)
+{
+    // 트리가 비어있는 경우
+    if (root == NULL) {
+        root = CreateNode(val);
+        return root;
+    }
+
+    //LevelOrderTraveral 
+    Queue* pqueue = NULL;
+    Enqueue(pqueue, root);
+
+    while (!isEmpty) {
+        TreeNode* temp = Peek(pqueue);
+        Dequeue(pqueue);
+
+        if (temp->left != NULL)
+            Enqueue(pqueue, temp->left);
+        else {
+            temp->left = CreateNode(val);
+            return root;
+        }
+
+        if (temp->right != NULL)
+            Enqueue(pqueue, temp->right);
+        else {
+            temp->right = CreateNode(val);
+            return root;
+        }
     }
 }
 
-//
-//TreeNode* createNode(int val) {
-//    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
-//    newNode->val = val;
-//    newNode->left = NULL;
-//    newNode->right = NULL;
-//    return newNode;
-//}
+
 
 bool isOneExists(TreeNode* node) {
     if (node == NULL)
@@ -108,6 +119,7 @@ void printBTree(TreeNode* root) {
     }
 }
 
+
 TreeNode* solution(TreeNode* root) {
     isOneExists(root);
     return root;
@@ -119,14 +131,13 @@ int main() {
     char* s;
     scanf_s("%[^\n]", str);
     for (i = 2; i > 1; cnt += i > 0) {
-        i = scanf_s(str, "%d%*[ ]%[^\n]", &arr[cnt], str);
+        i = sscanf_s(str, "%d%*[ ]%[^\n]", &arr[cnt], str);
     }
 
     TreeNode* root = NULL;
+    for (i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
+        printf("%d ", arr[i]);
 
-    for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); ++i) {
-        insertLevelOrder(root, arr[i]);
-    }
 
     solution(root);
 
@@ -135,3 +146,5 @@ int main() {
 
     return 0;
 }
+
+
