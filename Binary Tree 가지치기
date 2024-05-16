@@ -6,17 +6,21 @@ int arr[200] = { 0 };
 
 #define MAX_QUEUE 100
 
-typedef struct TreeNode {
+typedef struct TreeNode{
     int val;
     struct TreeNode* left;
     struct TreeNode* right;
 } TreeNode;
 typedef struct {
+    struct TreeNode* root;
+    struct TreeNode* items[200];
+}BTree;
+
+// Queue 함수들
+typedef struct {
     TreeNode* items[MAX_QUEUE];
     int front, rear;
 } Queue;
-
-// Queue 함수들
 void InitQueue(Queue* pqueue) {
     pqueue->front = pqueue->rear = -1;
 }
@@ -44,7 +48,6 @@ TreeNode* Peek(Queue* pqueue) {
         return pqueue->items[pqueue->front];
 }
 
-
 TreeNode* CreateNode(int val)
 {
     TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
@@ -54,41 +57,7 @@ TreeNode* CreateNode(int val)
     return newNode;
 }
 
-//Binary Tree에 노드 삽입 
-TreeNode* InsertNode(TreeNode* root, int val)
-{
-    // 트리가 비어있는 경우
-    if (root == NULL) {
-        root = CreateNode(val);
-        return root;
-    }
-
-    //LevelOrderTraveral 
-    Queue* pqueue = NULL;
-    Enqueue(pqueue, root);
-
-    while (!isEmpty) {
-        TreeNode* temp = Peek(pqueue);
-        Dequeue(pqueue);
-
-        if (temp->left != NULL)
-            Enqueue(pqueue, temp->left);
-        else {
-            temp->left = CreateNode(val);
-            return root;
-        }
-
-        if (temp->right != NULL)
-            Enqueue(pqueue, temp->right);
-        else {
-            temp->right = CreateNode(val);
-            return root;
-        }
-    }
-}
-
-
-
+//주어진 배열을 가지고 BinaryTree 1만들기 
 bool isOneExists(TreeNode* node) {
     if (node == NULL)
         return false;
@@ -100,7 +69,6 @@ bool isOneExists(TreeNode* node) {
 
     return node->val == 1 || leftIsOneExists || rightIsOneExists;
 }
-
 void printBTree(TreeNode* root) {
     Queue queue;
     InitQueue(&queue);
@@ -118,14 +86,36 @@ void printBTree(TreeNode* root) {
             Enqueue(&queue, root->right);
     }
 }
-
-
 TreeNode* solution(TreeNode* root) {
     isOneExists(root);
     return root;
 }
+void SetLeft(BTree* btree,int val,int parent_idx) {
+    TreeNode* newNode= CreateNode(val);
+    if (btree->items[parent_idx]->left != NULL)
+        exit(1);
+    btree->items[parent_idx]->left = newNode;
+}
+void SetRight(BTree* btree,int val, int parent_idx) {
+    TreeNode* newNode = CreateNode(val);
+    if (btree->items[parent_idx]->right != NULL)
+        exit(1);
+    btree->items[parent_idx]->right = newNode;
+}
 
-int main() {
+//void CreateLeftSubtree(TreeNode* root, TreeNode* left) {
+//    if (root->left!= NULL) 
+//        exit(1);
+//    root->left= left;
+//}
+//
+//void CreateRightSubtree(TreeNode* root, TreeNode* right) {
+//    if (root->right!= NULL)//이미 존재한다면 
+//        exit(1);
+//    root->right= right;
+//}
+
+ int main() {
     int i = 0, cnt = 0;
     char str[400] = { 0 };
     char* s;
@@ -135,9 +125,19 @@ int main() {
     }
 
     TreeNode* root = NULL;
-    for (i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
-        printf("%d ", arr[i]);
+    BTree* btree=NULL;
 
+    btree->root = CreateNode(arr[i]);
+
+    for (i = 0; i < 200; i=i*2)
+    {
+        //Set함수(트리, 값, 부모 인덱스)
+        SetLeft(btree,arr[i], i);
+        SetRight(btree,arr[i], i + 1);
+    }
+
+    for (i = 0; i < 200; i++)
+        printf("%d  ", arr[i]);
 
     solution(root);
 
@@ -146,5 +146,3 @@ int main() {
 
     return 0;
 }
-
-
