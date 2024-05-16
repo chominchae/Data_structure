@@ -11,6 +11,7 @@ typedef struct TreeNode{
     struct TreeNode* left;
     struct TreeNode* right;
 } TreeNode;
+
 typedef struct {
     struct TreeNode* root;
     struct TreeNode* items[200];
@@ -57,18 +58,22 @@ TreeNode* CreateNode(int val)
     return newNode;
 }
 
-//주어진 배열을 가지고 BinaryTree 1만들기 
-bool isOneExists(TreeNode* node) {
-    if (node == NULL)
+//주어진 배열을 가지고 BinaryTree 가지치기 
+bool isOneExists(TreeNode* root) {
+    if (root == NULL)
         return false;
-    bool leftIsOneExists = isOneExists(node->left);
-    bool rightIsOneExists = isOneExists(node->right);
+    bool leftIsOneExists = isOneExists(root->left);
+    bool rightIsOneExists = isOneExists(root->right);
 
-    if (!leftIsOneExists) node->left = NULL;
-    if (!rightIsOneExists) node->right = NULL;
+    if (!leftIsOneExists) 
+        root->left = NULL;
+    if (!rightIsOneExists) 
+        root->right = NULL;
 
-    return node->val == 1 || leftIsOneExists || rightIsOneExists;
+    return root->val == 1 || leftIsOneExists || rightIsOneExists;
 }
+
+//LevelOrder로 print 
 void printBTree(TreeNode* root) {
     Queue queue;
     InitQueue(&queue);
@@ -86,27 +91,15 @@ void printBTree(TreeNode* root) {
             Enqueue(&queue, root->right);
     }
 }
-TreeNode* solution(TreeNode* root) {
+
+void solution(TreeNode* root){
     isOneExists(root);
-    return root;
-}
-void SetLeft(BTree* btree,int val,int parent_idx) {
-    TreeNode* newNode= CreateNode(val);
-    if (btree->items[parent_idx]->left != NULL)
-        exit(1);
-    btree->items[parent_idx]->left = newNode;
-}
-void SetRight(BTree* btree,int val, int parent_idx) {
-    TreeNode* newNode = CreateNode(val);
-    if (btree->items[parent_idx]->right != NULL)
-        exit(1);
-    btree->items[parent_idx]->right = newNode;
 }
 
 //void CreateLeftSubtree(TreeNode* root, TreeNode* left) {
-//    if (root->left!= NULL) 
+//    if (root->left!= NULL)//이미 존재한다면 
 //        exit(1);
-//    root->left= left;
+//    root->left = left;
 //}
 //
 //void CreateRightSubtree(TreeNode* root, TreeNode* right) {
@@ -115,34 +108,96 @@ void SetRight(BTree* btree,int val, int parent_idx) {
 //    root->right= right;
 //}
 
+TreeNode* insertValue(TreeNode* root, int val,  TreeNode** q, int* front) {
+    TreeNode* node = CreateNode(val);//노드생성
+    if (root == NULL)
+        root = node;
+    else if (q[*front]->left == NULL)
+        q[*front]->left = node;
+    else {
+        q[*front]->right = node;
+        (*front)++;
+    }
+    q[*front] = node;
+    return root;
+}
+
+ TreeNode* createTree(int arr[], int n) {
+     TreeNode* root = NULL;
+     TreeNode** queue = (TreeNode**)malloc(n * sizeof(TreeNode*));
+    int front = 0;
+    for (int i = 0; i < n; i++)
+        root = insertValue(root, arr[i], queue, &front);
+    free(queue);
+    return root;
+}
+
+//TreeNode* buildTreeFromArray(int arr[]) {
+//    // 첫 번째 요소를 루트로 설정하고 큐에 추가
+//    TreeNode* root = CreateNode(arr[0]);
+//    // 큐를 이용하여 노드를 연결해나감
+//    int i = 1;
+//    while (i < 200) {
+//        TreeNode* cur = CreateNode(arr[i]);
+//        i++;
+//        // 현재 노드를 왼쪽 자식으로 연결
+//        CreateLeftSubtree(root, cur);
+//        // 다음 요소가 있는 경우 오른쪽 자식으로 연결
+//        if (i < 200) {
+//            cur = CreateNode(arr[i]);
+//            i++;
+//            createRightSubtree(root, cur);
+//        }
+//    }
+//    return root;
+//}
+
+//void SetLeft(BTree* btree,int val,int parent_idx) {
+//    TreeNode* newNode= CreateNode(val);
+//    if (btree->items[parent_idx]->left != NULL)
+//        exit(1);
+//    btree->items[parent_idx]->left = newNode;
+//}
+//
+//void SetRight(BTree* btree,int val, int parent_idx) {
+//    TreeNode* newNode = CreateNode(val);
+//    if (btree->items[parent_idx]->right != NULL)
+//        exit(1);
+//    btree->items[parent_idx]->right = newNode;
+//}
+
+
  int main() {
+	  //////
     int i = 0, cnt = 0;
     char str[400] = { 0 };
     char* s;
-    scanf_s("%[^\n]", str);
+
+    scanf("%[^\n]", str);
     for (i = 2; i > 1; cnt += i > 0) {
-        i = sscanf_s(str, "%d%*[ ]%[^\n]", &arr[cnt], str);
+        i = sscanf(str, "%d%*[ ]%[^\n]", &arr[cnt], str);
     }
-
-    TreeNode* root = NULL;
-    BTree* btree=NULL;
-
+		//// arr에 저장된다. 
+    TreeNode* root = CreateNode(arr[i]);
+    BTree* btree = (BTree*)malloc(sizeof(BTree));
     btree->root = CreateNode(arr[i]);
 
-    for (i = 0; i < 200; i=i*2)
-    {
-        //Set함수(트리, 값, 부모 인덱스)
-        SetLeft(btree,arr[i], i);
-        SetRight(btree,arr[i], i + 1);
-    }
+    //for (i = 0; i < 200; i=i*2)
+    //{
+    //    //Set함수(트리, 값, 부모 인덱스)
+    //    SetLeft(btree,arr[i], i);
+    //    SetRight(btree,arr[i], i + 1);
+    //}
 
     for (i = 0; i < 200; i++)
         printf("%d  ", arr[i]);
 
-    solution(root);
+    solution(btree->root);
 
-    // print tree as array
+    //// print tree as array
     printBTree(root);
-
+	 
+    free(root);
+    free(btree);
     return 0;
 }
