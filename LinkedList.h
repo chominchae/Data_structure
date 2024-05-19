@@ -25,7 +25,7 @@ bool IsFull(ArrayList* plist){
 
 void InsertMiddle(ArrayList * plist,int pos,Data item){
 	if (IsFull(plist) || pos<0 || pos>plist->len)
-		exit(1);
+		exit(188);
 	else 
 		for(int i = plist->len-1; i >=pos; i--) {
 			plist->items[i + 1] = plist->items[i];
