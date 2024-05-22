@@ -11,7 +11,7 @@ typedef struct _bTreeNode {
 
 BTreeNode* CreateNode(BData item) {
 	BTreeNode* node = (BTreeNode*)malloc(sizeof(BTreeNode));//노드 생성
-	//초기화
+
 	node->item = item;
 	node->left_child = NULL;
 	node->right_child = NULL;
