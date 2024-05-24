@@ -6,7 +6,6 @@
 typedef int Data;
 
 typedef struct {
-	//실제로는 이거 이용
 	Data items[MAX_LIST];
 	int len;
 } ArrayList;
