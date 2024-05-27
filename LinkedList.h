@@ -2,7 +2,7 @@
 #define MAX_LIST 200
 #include<stdio.h>
 
-//typedef enum{false,true} bool;
+
 typedef int Data;
 
 typedef struct {
