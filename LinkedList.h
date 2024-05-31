@@ -39,7 +39,6 @@ void RemoveMiddle(ArrayList* plist, int pos){
 	else 
 		for (int i = pos + 1; i < plist->len; i++)
 			plist->items[i] = plist->items[i + 1];
-		
 	plist->len--;
 }
 
