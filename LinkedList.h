@@ -30,6 +30,7 @@ void InsertMiddle(ArrayList * plist,int pos,Data item){
 			plist->items[i + 1] = plist->items[i];
 	}
 	plist->items[pos] = item;
+	
 	plist->len++;
 }
 
