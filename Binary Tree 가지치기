@@ -142,7 +142,7 @@ int main() {
    	// arrayToTree(root, arr);//배열을 Tree로 변환
 	  int temp[201] = { 0 };//삽입을 위한 새로운 배열 추가 
     for (int i = 0; i < 200; i++)
-       temp[i + 1] = arr[i];//인덱스 하나씩 증가시키고 원소 복사
+       temp[i + 1] = arr[i];
 
     Queue pqueue;
     InitQueue(&pqueue);
