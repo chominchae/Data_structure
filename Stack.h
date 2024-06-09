@@ -25,7 +25,7 @@ bool IsEmpty(Stack* pstack) {
 
 Data Peek(Stack* pstack) {
 	if (IsEmpty(pstack))
-		exit(1);//비정상 종료, 오류 코드 1 반환
+		exit(1);
 	return pstack->items[pstack->top];
 }
 
