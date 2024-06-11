@@ -3,7 +3,7 @@
 #include<stdbool.h>
 #include "BTreeNode.h"
 
-#define MAX_STACK	200
+#define MAX_STACK 	200
 typedef BTreeNode* Data;
 
 typedef struct {
