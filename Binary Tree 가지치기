@@ -34,7 +34,7 @@ bool IsFull(Queue* pqueue) {
 
 void Enqueue(Queue* pqueue, TreeNode* root) {
     if (IsFull(pqueue))
-        exit(188);
+        exit(1);
     pqueue->rear = (pqueue->rear + 1) % MAX_QUEUE;
     pqueue->items[pqueue->rear] = root;
 }
